@@ -1,0 +1,10 @@
+"schema_version" = 2
+
+["soc"]
+"name" = "sm7635"
+"description" = "Qualcomm SM7635 (volcano, Snapdragon 7s Gen 3)"
+"source_repository" = "https://github.com/NullDebris/android_kernel_nothing_sm7635-devicetrees"
+"source_revision" = "e0eb1dc2235850f9f966bfb3294967d06c00a0f1"
+
+["components"]
+"include" = ["ArmCpu", "ArmDTPlatform"]
