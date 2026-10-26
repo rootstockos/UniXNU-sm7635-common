@@ -1,12 +1,15 @@
 # UniXNU SM7635 support
 
 Shared Qualcomm SM7635 (volcano, Snapdragon 7s Gen 3) support for UniXNU: CPU topology, GICv3, UFS resources, the
-Adreno 810 register blocks, and XNU patches. Device repositories supply memory layout, peripherals, firmware, power policy
+Adreno 810 register blocks, the gen8 GMU platform operations, and XNU patches. Device repositories supply memory layout, peripherals, firmware, power policy
 and packaging.
 
 The SoC shares SM8550's GIC layout, timer, CPU numbering, PSCI method and UFS host and PHY windows. Its cores are four
 Cortex-A520 and four Cortex-A720. The GPU is an Adreno 810 (gen8); its driver is board-owned for now (the asteroids device
-repository's NativeAdreno), so the GPU nodes stay disabled here.
+repository's NativeAdreno), so the GPU nodes stay disabled here. `kits/Sm7635Platform` is the counterpart of sm8550's
+`Sm8550Platform`: the GMU cold start (`ShengGmu*`, with the gen8 paths) and the RPMh command-database parser
+(`ShengGmuCommandDb*`), with the filenames and symbols kept. The board supplies its votes (`ShengGmuVotes.c`) and the generated
+register, firmware and vote headers.
 
 Hardware descriptions use `qcom/volcano.dtsi` at revision `e0eb1dc2235850f9f966bfb3294967d06c00a0f1` of
 [android_kernel_nothing_sm7635-devicetrees](https://github.com/NullDebris/android_kernel_nothing_sm7635-devicetrees),
@@ -25,6 +28,7 @@ Build through the [UniXNU CLI](https://unixnu.com/building). Read the
 | `configs/` | Kernel configuration fragments |
 | `dts/sm7635.dtsi` | Shared hardware resources |
 | `patches/xnu/series` | Ordered SoC patches (secondary CPU start, the platform power provider) |
+| `kits/Sm7635Platform/` | GMU cold start and command database operations |
 
 ## Devices
 
