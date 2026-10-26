@@ -56,6 +56,35 @@
             status = "disabled";
         };
 
+        // volcano.dtsi qcom,spmi@c42d000 (bus 0, arbiter version 7, EE 0) with the PMK8550 at SID 0 and its RTC (pmk8550.dtsi
+        // rtc@6100, "qcom,pmk8350-rtc", no allow-set-time: the counter is read-only for the apps EE). The PMIC and RTC are exported
+        // below the arbiter with their SPMI-local reg; the RTC's alarm interrupt is not used.
+        spmi_bus: spmi@c42d000 {
+            compatible = "qcom,spmi-pmic-arb";
+            unixnu,adt-name = "spmi";
+            reg = <0 0x0c42d000 0 0x4000>, <0 0x0c400000 0 0x3000>, <0 0x0c500000 0 0x400000>,
+                  <0 0x0c440000 0 0x80000>, <0 0x0c4c0000 0 0x10000>;
+            reg-names = "cnfg", "core", "chnls", "obsrvr", "intr";
+            qcom,ee = <0>;
+            #address-cells = <2>;
+            #size-cells = <0>;
+
+            pmk8550: pmic@0 {
+                compatible = "qcom,pmk8550", "qcom,spmi-pmic";
+                unixnu,adt-name = "pmk8550";
+                reg = <0 0>;
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+                pmk8550_rtc: rtc@6100 {
+                    compatible = "qcom,pmk8350-rtc";
+                    unixnu,adt-name = "rtc";
+                    reg = <0x6100>, <0x6200>;
+                    reg-names = "rtc", "alarm";
+                };
+            };
+        };
+
         // Adreno 810 (gen8): kgsl_3d0_reg_memory, cx_misc, the GMU and its AO block, RSCC and the GPU's SMMU. The board's GPU
         // driver takes these from board.toml [gpu]; the nodes record them and stay disabled.
         gpu: gpu@3d00000 {
